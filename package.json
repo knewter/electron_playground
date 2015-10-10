@@ -1,0 +1,9 @@
+{
+  "name"    : "electron-playground",
+  "version" : "0.1.0",
+  "main"    : "bootstrapper.js",
+  "dependencies": {
+    "babel": "*",
+    "react": "*"
+  }
+}
