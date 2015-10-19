@@ -1,0 +1,9 @@
+defmodule Components.App do
+  JS.import React, "react"
+
+  def start() do
+    Components.Layout.create_class()
+    |> React.createElement
+    |> React.render(:document.getElementById("main"))
+  end
+end

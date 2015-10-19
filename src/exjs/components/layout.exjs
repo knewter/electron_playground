@@ -1,0 +1,91 @@
+defmodule Components.Layout do
+  import Values.Colors
+  import Values.Sizes
+
+  alias Stores.Store
+
+  JS.import React, "react"
+
+  def create_class() do
+    React.createClass(%{
+      "displayName" => "Layout",
+
+      "getInitialState" => fn() -> %{} end,
+
+      "render" => fn() ->
+
+        React.DOM.div(%{},
+          React.DOM.div(
+            %{"className" => "toolArea"},
+            React.DOM.span(
+              %{"className" => "toolTitle"},
+              nil,
+              "Sizes"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) -> Store.dispatch(%{"type" => :changeSize, "size" => small()}) end
+                },
+              nil,
+              "Small"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) -> Store.dispatch(%{"type" => :changeSize, "size" => medium()}) end
+                },
+              nil,
+              "Medium"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) -> Store.dispatch(%{"type" => :changeSize, "size" => large()}) end
+              },
+              nil,
+              "Large"
+            )
+          ),
+          React.DOM.div(
+            %{"className" => "toolArea"},
+            React.DOM.span(
+              %{"className" => "toolTitle"},
+              nil,
+              "Colors"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) -> Store.dispatch(%{"type" => :changeColor, "color" => black()}) end
+              },
+              nil,
+              "Black"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) -> Store.dispatch(%{"type" => :changeColor, "color" => purple()}) end
+              },
+              nil,
+              "Purple"
+            ),
+            React.DOM.button(
+              %{
+                "className" => "toolButton",
+                "onClick" => fn(_, _) ->
+                  Store.dispatch(%{"type" => :changeColor, "color" => green()})
+                end
+              },
+              nil,
+              "Green"
+            )
+          ),
+          React.createElement(Components.Graphic.create_class())
+        )
+
+      end
+    })
+
+  end
+end

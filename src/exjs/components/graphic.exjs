@@ -1,0 +1,89 @@
+defmodule Components.Graphic do
+  JS.import React, "react"
+
+  alias Stores.Store
+
+  def create_class() do
+    React.createClass(%{
+      "getInitialState" => fn() -> nil end,
+
+      "getRawCanvas" => fn() ->  React.findDOMNode(this) end,
+
+      "getContext" => fn() -> this.getRawCanvas().getContext("2d") end,
+
+      "componentDidMount" => fn() ->
+        outerScope = this
+
+        Store.subscribe(fn() ->
+          outerScope.paint(Store.get(), outerScope.getContext())
+        end)
+      end,
+
+      "paint" => fn(data, context) ->
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+        context.save()
+
+        JS.update(context, "lineJoin", "round")
+        Enum.map_reduce(data.clickX, 0, fn(x, i)->
+          context.beginPath()
+
+          if data["clickDrag"][i] && i do
+            context.moveTo(data.clickX[i - 1], data.clickY[i - 1])
+          else
+            context.moveTo(data.clickX[i]-1, data.clickY[i])
+          end
+
+          context.lineTo(data.clickX[i], data.clickY[i])
+          context.closePath()
+
+          JS.update(context, "strokeStyle", data.clickColor[i])
+          JS.update(context, "lineWidth", data.clickSize[i])
+          context.stroke()
+          {nil, i + 1}
+        end)
+
+        JS.update(context, "globalAlpha", 1)
+        context.restore()
+      end,
+
+      "onMouseMoveHandler" => fn(event, _) ->
+        canvas = this.getRawCanvas()
+        mouseX = event.pageX - canvas.offsetLeft
+        mouseY = event.pageY - canvas.offsetTop
+
+        if(Store.get().paint) do
+          Store.dispatch(%{"type" => :addPoint, "point" => %{ "x" => mouseX, "y" => mouseY, "dragging" => true }})
+        end
+      end,
+
+      "onMouseDownHandler" => fn(event, _) ->
+        canvas = this.getRawCanvas()
+        mouseX = event.pageX - canvas.offsetLeft
+        mouseY = event.pageY - canvas.offsetTop
+
+        Store.dispatch(%{"type" => :startPainting})
+        Store.dispatch(%{"type" => :addPoint, "point" => %{ "x" => mouseX, "y" => mouseY, "dragging" => false }})
+      end,
+
+      "onMouseUpHandler" => fn(event, _) ->
+        Store.dispatch(%{"type" => :stopPainting})
+      end,
+
+      "onMouseLeaveHandler" => fn(event, _) ->
+        Store.dispatch(%{"type" => :stopPainting})
+      end,
+
+      "render" => fn() ->
+        React.DOM.canvas(%{
+         "className" => "drawingArea",
+         "width" => 800,
+         "height" => 600,
+         "onMouseDown" => this["onMouseDownHandler"],
+         "onMouseMove" => this["onMouseMoveHandler"],
+         "onMouseUp" => this["onMouseUpHandler"],
+         "onMouseLeave" => this["onMouseLeaveHandler"]
+        })
+      end
+    })
+  end
+end

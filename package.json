@@ -1,9 +1,39 @@
 {
-  "name"    : "electron-playground",
-  "version" : "0.1.0",
-  "main"    : "bootstrapper.js",
+  "name": "electron-playground",
+  "version": "0.1.0",
+  "main": "bootstrapper.js",
   "dependencies": {
     "babel": "*",
     "react": "*"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.7.1",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-plumber": "^1.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-spawn": "^0.3.0",
+    "jspm": "^0.15.6"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "bootstrap": "github:twbs/bootstrap@^3.3.4",
+      "delorean": "npm:delorean@^0.9.3",
+      "fabric": "npm:fabric@^1.5.0",
+      "immutable": "npm:immutable@^3.7.2",
+      "react": "npm:react@^0.14.0-alpha1",
+      "redux": "npm:redux@^3.0.0"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.1.13",
+      "babel-runtime": "npm:babel-runtime@^5.1.13",
+      "core-js": "npm:core-js@^0.9.4",
+      "traceur": "github:jmcriffey/bower-traceur@0.0.88",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88"
+    }
   }
 }

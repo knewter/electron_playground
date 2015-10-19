@@ -1,0 +1,13 @@
+defmodule App do
+  alias Components.App, as: ReactApp
+  alias Stores.Store
+
+
+  def main() do
+    Store.init()
+    ReactApp.start()
+  end
+
+  main()
+
+end
